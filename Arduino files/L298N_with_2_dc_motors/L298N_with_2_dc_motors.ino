@@ -59,9 +59,9 @@ void setup()
 void loop() 
 { 
     digitalWrite(direction1,direction);   // Direction control motor 1
-//    digitalWrite(direction2,direction);   // Direction control motor 2
-    analogWrite(speed1, 205);              // PWM Speed Control motor 1
-//    analogWrite(speed2, 150);             // PWM Speed Control motor 2
+    digitalWrite(direction2,direction);   // Direction control motor 2
+    analogWrite(speed1, 150);              // PWM Speed Control motor 1
+    analogWrite(speed2, 150);             // PWM Speed Control motor 2
 //    delay(1000); 
 //    analogWrite(speed1, 100);             // PWM Speed Control motor 1
 //    analogWrite(speed2, 200);             // PWM Speed Control motor 2
