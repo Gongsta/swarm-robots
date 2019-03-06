@@ -21,9 +21,9 @@
 
   http://www.arduino.cc/en/Tutorial/Blink
 */
-#define RED_PIN 9
-#define GREEN_PIN 10
-#define BLUE_PIN 11
+#define RED_PIN 1
+#define GREEN_PIN 7
+#define BLUE_PIN 8
 // the setup function runs once when you press reset or power the board
 void setup() {
   // initialize digital pin LED_BUILTIN as an output.
