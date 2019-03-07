@@ -106,6 +106,9 @@
 
 #include <Servo.h>  //include the servo motor library
 
+//nRF24 libraries
+#include <SPI.h>
+#include "RF24.h"
 
 Servo myservo1, myservo2;  // create 2 servo objects
  
@@ -123,6 +126,15 @@ int servo_positions[total_positions] =
 #define GREEN_PIN 7
 #define BLUE_PIN 8
 
+char message = 'A';
+
+int led_pin = 8;
+
+RF24 radio(9,10);  //Radio Pins
+
+// Radio pipe addresses for the 2 nodes to communicate.
+const uint64_t pipes[2] = { 0xF0F0F0F0E1LL, 0xF0F0F0F0D2LL };
+
 int speed1     = 5; //Controls speed (PWM) for DC motor 1
 int direction1 = 4; //Controls direction for DC motor 1
 int speed2     = 3; //Controls speed (PWM) for DC motor 2
@@ -130,7 +142,7 @@ int direction2 = 2; //Controls direction for DC motor 2
 
 bool direction = HIGH;  // Start the motor by moving it towards one direction. Whether it is
                         // clockwise or anticlockwise depends on how you have connected the 
-                        // motor's coil.
+                        // motor's coil. Setting it LOW will make it move in the other direction.
 
 
 
@@ -155,6 +167,12 @@ void setup() {
   pinMode(RED_PIN, OUTPUT);
   pinMode(BLUE_PIN, OUTPUT);
   pinMode(GREEN_PIN, OUTPUT);
+
+  //Transmitter radio setup
+  radio.begin();
+  radio.openWritingPipe(pipes[0]);
+  radio.openReadingPipe(1,pipes[1]);  
+  radio.printDetails();
 } 
  
 void loop() { 
