@@ -11,10 +11,14 @@
  *  - Ultrasonic sensor
  *  - a L298N motor controller breakout
  *  - two small 5V DC motors
+ *  - RGB light
+ *  -
  *  
  *  Libraries
  *  ---------
  *  - Servo (comes with the Arduino IDE)
+ *  - SPI
+ *  - RF24
  *
  * Connections
  * -----------
@@ -61,16 +65,26 @@
  *      
  * RGB Light   --> Arduino Uno
  *  -----------------------------
- *    GND       |      GND
- *   Red light  |      D1
- *  Green light |      D7
- *  Blue light  |      D8
+ *    GND        |      GND
+ *   Red light   |      D1
+ *  Green light  |      D7
+ *  Blue light   |      D8
  *     
  *     
  *     Pixy2   --> Arduino Uno
  *  -----------------------------
  *    
- *   
+ *    
+ *   nRF24   -->  Arduino Uno
+ *  -----------------------------
+ *      IRQ      |      -
+ *      MOSI     |     D11
+ *      CSN      |     D10
+ *      VCC      |     3.3v (careful not 5v or else will burn)
+ *      GND      |     GND
+ *      CE       |     D9
+ *      SCK      |     D13
+ *      MISO     |     D12
  *  More information
  *  ----------------
  *  
