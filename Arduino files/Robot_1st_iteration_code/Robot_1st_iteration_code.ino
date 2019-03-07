@@ -24,28 +24,28 @@
  *  -----------------------------
  *    Red wire   |      5V
  *   Brown wire  |      GND
- *  Yellow wire  |      9
+ *  Yellow wire  |      D9
  *  
  * Servo motor 2 --> Arduino Uno
  *  -----------------------------
  *    Red wire   |      5V
  *   Brown wire  |      GND
- *  Yellow wire  |      10
+ *  Yellow wire  |      D10
  * 
  *  Ultrasonic ---> Arduino Uno
  *  -----------------------------
  *      VCC      |      5V
  *      GND      |      GND
- *      Echo     |      12
- *      Trig     |      13
+ *      Echo     |      D12
+ *      Trig     |      D13
  *     
  *     L298N   ---> Arduino Uno
  *  -----------------------------
  *      GND      |      GND
- *      IN1      |      5            IN1 requires PWM
- *      IN2      |      4
- *      IN3      |      3            IN3 requires PWM
- *      IN4      |      2   
+ *      IN1      |      D5            IN1 requires PWM
+ *      IN2      |      D4
+ *      IN3      |      D3            IN3 requires PWM
+ *      IN4      |      D2   
  *     
  *     L298N  --->   Motors
  *  -----------------------------
@@ -58,7 +58,19 @@
  *  -----------------------------
  *      +12V     | 9V Power Supply
  *      GND      | GND Power supply    
+ *      
+ * RGB Light   --> Arduino Uno
+ *  -----------------------------
+ *    GND       |      GND
+ *   Red light  |      D1
+ *  Green light |      D7
+ *  Blue light  |      D8
  *     
+ *     
+ *     Pixy2   --> Arduino Uno
+ *  -----------------------------
+ *    
+ *   
  *  More information
  *  ----------------
  *  
@@ -92,6 +104,11 @@ int servo_positions[total_positions] =
 #define trigPin 13  //trigger pin on ultrasonic sensor
 #define echoPin 12  //echo pin on ultrasonic sensor
 
+//Defining the RGB Pins
+#define RED_PIN 1
+#define GREEN_PIN 7
+#define BLUE_PIN 8
+
 int speed1     = 5; //Controls speed (PWM) for DC motor 1
 int direction1 = 4; //Controls direction for DC motor 1
 int speed2     = 3; //Controls speed (PWM) for DC motor 2
@@ -119,6 +136,11 @@ void setup() {
   pinMode(speed1, OUTPUT);  
   pinMode(direction2, OUTPUT);  
   pinMode(speed2, OUTPUT);  
+
+  //RGB Light setup
+  pinMode(RED_PIN, OUTPUT);
+  pinMode(BLUE_PIN, OUTPUT);
+  pinMode(GREEN_PIN, OUTPUT);
 } 
  
 void loop() { 
@@ -132,8 +154,17 @@ void loop() {
   }
 
 
-
-
+  
+  //Code that tests the RGB light
+  digitalWrite(BLUE_PIN, LOW);
+  digitalWrite(GREEN_PIN, HIGH);   // turn the LED on (HIGH is the voltage level)
+  delay(1000);                       // wait for a second
+  digitalWrite(GREEN_PIN, LOW);
+  digitalWrite(RED_PIN, HIGH);    // turn the LED off by making the voltage LOW
+  delay(1000);                       // wait for a second
+  digitalWrite(RED_PIN, LOW);   // turn the LED on (HIGH is the voltage level)
+  digitalWrite(BLUE_PIN, HIGH);
+  delay(1000);                       // wait for a second
 
   
   //Code that allows me to measure distance from ultrasonic sensor
@@ -151,7 +182,7 @@ void loop() {
   }
   else {
     Serial.print(distance);
-    Serial.println(" cm");
+    Serial.println(" cm"); //Prints the distance object is from robot
   }
   delay(250);
 
