@@ -1,6 +1,7 @@
 /* 
  * Description:
  * 
+ * A simple program that tests all of the functionalities in my robot.
  * 
  * 
  * Components
@@ -8,6 +9,8 @@
  *  - Arduino Uno
  *  - One or two hobby servo motors
  *  - Ultrasonic sensor
+ *  - a L298N motor controller breakout
+ *  - two small 5V DC motors
  *  
  *  Libraries
  *  ---------
@@ -23,20 +26,38 @@
  *   Brown wire  |      GND
  *  Yellow wire  |      9
  *  
- *  Servo motor 2 --> Arduino Uno
+ * Servo motor 2 --> Arduino Uno
  *  -----------------------------
  *    Red wire   |      5V
  *   Brown wire  |      GND
  *  Yellow wire  |      10
- *     
  * 
- * 
- *  Ultrasonic  ---> Arduino Uno
+ *  Ultrasonic ---> Arduino Uno
  *  -----------------------------
  *      VCC      |      5V
  *      GND      |      GND
  *      Echo     |      12
  *      Trig     |      13
+ *     
+ *     L298N   ---> Arduino Uno
+ *  -----------------------------
+ *      GND      |      GND
+ *      IN1      |      5            IN1 requires PWM
+ *      IN2      |      4
+ *      IN3      |      3            IN3 requires PWM
+ *      IN4      |      2   
+ *     
+ *     L298N  --->   Motors
+ *  -----------------------------
+ *      OUT1     | DC Motor 1 wire 1
+ *      OUT2     | DC Motor 1 wire 2
+ *      OUT3     | DC Motor 2 wire 1
+ *      OUT4     | DC Motor 2 wire 2
+ *      
+ *     L298N  --->   Power
+ *  -----------------------------
+ *      +12V     | 9V Power Supply
+ *      GND      | GND Power supply    
  *     
  *  More information
  *  ----------------
@@ -53,12 +74,12 @@
  * HC-SR04 datasheet: https://docs.google.com/document/d/1Y-yZnNhMYy7rwhAgyL_pfa39RsB-x2qR4vP8saG73rE
  * Information about the pulseIn function: https://www.arduino.cc/en/Reference/PulseIn
  *  
- * 
+ * L298N motor driver
+ * L298N datasheet: http://www.ti.com/lit/ds/symlink/l293.pdf
  */
 
 #include <Servo.h>  //include the servo motor library
-#define trigPin 13  //trigger pin on ultrasonic sensor
-#define echoPin 12  //echo pin on ultrasonic sensor
+
 
 Servo myservo1, myservo2;  // create 2 servo objects
  
@@ -66,14 +87,38 @@ int pos_index = 0;
 int const total_positions = 10;
 int servo_positions[total_positions] = 
     {156, 79, 88, 152, 34, 144, 28, 174, 117, 27};  //a random list of 10 servo positions
+
  
+#define trigPin 13  //trigger pin on ultrasonic sensor
+#define echoPin 12  //echo pin on ultrasonic sensor
+
+int speed1     = 5; //Controls speed (PWM) for DC motor 1
+int direction1 = 4; //Controls direction for DC motor 1
+int speed2     = 3; //Controls speed (PWM) for DC motor 2
+int direction2 = 2; //Controls direction for DC motor 2
+
+bool direction = HIGH;  // Start the motor by moving it towards one direction. Whether it is
+                        // clockwise or anticlockwise depends on how you have connected the 
+                        // motor's coil.
+
+
+
+
 void setup() { 
-  
+  //Servo Motor setup
   myservo1.attach(9);   // attaches the servo on pin 9 to the servo motor 1 
   myservo2.attach(10);  // attaches the servo on pin 10 to the servo motor 2 
-  Serial.begin (9600);   
+  Serial.begin (9600);
+
+  //Ultrasonic sensor setup  
   pinMode(trigPin, OUTPUT); //set the trigPin as Output
   pinMode(echoPin, INPUT);  //set the echoPin as Input
+
+  //DC Motor setup
+  pinMode(direction1, OUTPUT);  
+  pinMode(speed1, OUTPUT);  
+  pinMode(direction2, OUTPUT);  
+  pinMode(speed2, OUTPUT);  
 } 
  
 void loop() { 
