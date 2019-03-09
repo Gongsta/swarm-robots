@@ -106,13 +106,17 @@
 
 #include <Servo.h>  //include the servo motor library
 
+#include <Pixy2.h>  //include the Pixy2 library
+
 //nRF24 libraries
 #include <SPI.h>
 #include "RF24.h"
 
 Servo myservo1; // create servo object 1
 //Servo myservo2; //create servo object 2
- 
+
+Pixy2 pixy;   //create the Pixy object
+
 int pos_index = 0;    
 int const total_positions = 10;
 int servo_positions[total_positions] = 
