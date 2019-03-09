@@ -102,6 +102,10 @@
  *  
  * L298N motor driver
  * L298N datasheet: http://www.ti.com/lit/ds/symlink/l293.pdf
+ * 
+ * 
+ * Pixy 2
+ * http://t-moe.github.io/discoverpixy/group__pixy.html
  */
 
 #include <Servo.h>  //include the servo motor library
@@ -178,9 +182,40 @@ void setup() {
   radio.openWritingPipe(pipes[0]);
   radio.openReadingPipe(1,pipes[1]);  
   radio.printDetails();
+
+
+  //Pixy setup (initializing the object
+  pixy.init();
 } 
  
 void loop() { 
+
+  //Code that displays in the serial monitor the objects that the Pixy2  
+  //has detected and prints out a variety of information
+
+  int i; 
+  // grab blocks!
+  pixy.ccc.getBlocks();
+  
+  // If there are detect blocks, print them!
+  if (pixy.ccc.numBlocks)
+  {
+    Serial.print("Detected ");
+    Serial.println(pixy.ccc.numBlocks);
+    for (i=0; i<pixy.ccc.numBlocks; i++)
+    {
+      Serial.print("  block ");
+      Serial.print(i);
+      Serial.print(": ");
+      pixy.ccc.blocks[i].print();
+    }
+  }
+
+
+
+
+
+  
   //Code that lets me test that the motors are functioning 
   for (pos_index = 0; pos_index <= total_positions; pos_index += 1) { 
     // in steps of 1 degree
