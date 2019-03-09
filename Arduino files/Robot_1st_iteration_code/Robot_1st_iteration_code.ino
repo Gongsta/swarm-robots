@@ -85,6 +85,17 @@
  *      CE       |     D9
  *      SCK      |     D13
  *      MISO     |     D12
+ *      
+ *     MPU6050   -->  Arduino Uno
+ *  -----------------------------
+ *      VCC     |      5V
+ *      GND     |     GND
+ *      SCL     |     A4
+ *      SDA     |     A5
+ *      XDA     |     -
+ *      XCL     |     -
+ *      AD0     |     GND
+ *      INT     |     D2
  *  More information
  *  ----------------
  *  
@@ -186,20 +197,19 @@ void setup() {
 
   //Pixy setup (initializing the object
   pixy.init();
+  pixy.changeProg("color_connected_components");
 } 
  
 void loop() { 
 
   //Code that displays in the serial monitor the objects that the Pixy2  
   //has detected and prints out a variety of information
-
   int i; 
   // grab blocks!
   pixy.ccc.getBlocks();
   
   // If there are detect blocks, print them!
-  if (pixy.ccc.numBlocks)
-  {
+  if (pixy.ccc.numBlocks) {
     Serial.print("Detected ");
     Serial.println(pixy.ccc.numBlocks);
     for (i=0; i<pixy.ccc.numBlocks; i++)
@@ -211,15 +221,18 @@ void loop() {
     }
   }
 
-
+ 
 
 
 
   
   //Code that lets me test that the motors are functioning 
-  for (pos_index = 0; pos_index <= total_positions; pos_index += 1) { 
+  
+   for (pos_index = 0; pos_index <= total_positions; pos_index += 1) { 
     // in steps of 1 degree
     myservo1.write(servo_positions[pos_index]);    // tell servo 1 to go to new position
+    
+    pixy.setServos(servo_positions[pos_index], servo_positions[pos_index]);
     delay(100);                                    // Insert small delay to give servo 1 a head start
 //    myservo2.write(servo_positions[pos_index]);    // tell servo 2 to go to new position
 //    delay(400);                                    // wait for servo 2 to reach the position
