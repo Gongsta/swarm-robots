@@ -28,20 +28,20 @@
  *  -----------------------------
  *    Red wire   |      5V
  *   Brown wire  |      GND
- *  Yellow wire  |      D9
+ *  Yellow wire  |      D6
  *  
- * Servo motor 2 --> Arduino Uno
+ * Servo motor 2 --> Pixy2
  *  -----------------------------
- *    Red wire   |      5V
- *   Brown wire  |      GND
- *  Yellow wire  |      D10
+ *  
+ *  Servo motor 3 --> Pixy2
+ *  -----------------------------
  * 
  *  Ultrasonic ---> Arduino Uno
  *  -----------------------------
  *      VCC      |      5V
  *      GND      |      GND
- *      Echo     |      D12
- *      Trig     |      D13
+ *      Echo     |      D14
+ *      Trig     |      D15
  *     
  *     L298N   ---> Arduino Uno
  *  -----------------------------
@@ -110,7 +110,8 @@
 #include <SPI.h>
 #include "RF24.h"
 
-Servo myservo1, myservo2;  // create 2 servo objects
+Servo myservo1; // create servo object 1
+//Servo myservo2; //create servo object 2
  
 int pos_index = 0;    
 int const total_positions = 10;
@@ -118,8 +119,8 @@ int servo_positions[total_positions] =
     {156, 79, 88, 152, 34, 144, 28, 174, 117, 27};  //a random list of 10 servo positions
 
  
-#define trigPin 13  //trigger pin on ultrasonic sensor
-#define echoPin 12  //echo pin on ultrasonic sensor
+#define trigPin 15  //trigger pin on ultrasonic sensor
+#define echoPin 14  //echo pin on ultrasonic sensor
 
 //Defining the RGB Pins
 #define RED_PIN 1
@@ -149,8 +150,8 @@ bool direction = HIGH;  // Start the motor by moving it towards one direction. W
 
 void setup() { 
   //Servo Motor setup
-  myservo1.attach(9);   // attaches the servo on pin 9 to the servo motor 1 
-  myservo2.attach(10);  // attaches the servo on pin 10 to the servo motor 2 
+  myservo1.attach(6);   // attaches the servo on pin 9 to the servo motor 1 
+//  myservo2.attach(10);  // attaches the servo on pin 10 to the servo motor 2 
   Serial.begin (9600);
 
   //Ultrasonic sensor setup  
@@ -181,8 +182,8 @@ void loop() {
     // in steps of 1 degree
     myservo1.write(servo_positions[pos_index]);    // tell servo 1 to go to new position
     delay(100);                                    // Insert small delay to give servo 1 a head start
-    myservo2.write(servo_positions[pos_index]);    // tell servo 2 to go to new position
-    delay(400);                                    // wait for servo 2 to reach the position
+//    myservo2.write(servo_positions[pos_index]);    // tell servo 2 to go to new position
+//    delay(400);                                    // wait for servo 2 to reach the position
   }
 
 

@@ -21,8 +21,8 @@
  *  -----------------------------
  *      VCC      |      5V
  *      GND      |      GND
- *      Echo     |      12
- *      Trig     |      13
+ *      Echo     |      14
+ *      Trig     |      15
  *   
  * 
  * Other information
@@ -36,8 +36,8 @@
  */
 
 
-#define trigPin 13
-#define echoPin 12
+#define trigPin 15
+#define echoPin 14
 
 void setup() {
   Serial.begin (9600);
