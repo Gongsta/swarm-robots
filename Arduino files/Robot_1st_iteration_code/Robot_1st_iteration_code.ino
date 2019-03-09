@@ -7,7 +7,7 @@
  * Components
  * ----------
  *  - Arduino Uno
- *  - One or two hobby servo motors
+ *  - 3 servo motors
  *  - Ultrasonic sensor
  *  - a L298N motor controller breakout
  *  - two small 5V DC motors
@@ -185,6 +185,12 @@ void loop() {
 //    myservo2.write(servo_positions[pos_index]);    // tell servo 2 to go to new position
 //    delay(400);                                    // wait for servo 2 to reach the position
   }
+
+
+  digitalWrite(direction1,direction);   // Direction control motor 1
+  digitalWrite(direction2,direction);   // Direction control motor 2
+  analogWrite(speed1, 150);             // PWM Speed Control motor 1
+  analogWrite(speed2, 150);             // PWM Speed Control motor 2
 
 
   
