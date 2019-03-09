@@ -90,8 +90,8 @@
  *  -----------------------------
  *      VCC     |      5V
  *      GND     |     GND
- *      SCL     |     A4
- *      SDA     |     A5
+ *      SCL     |     A5
+ *      SDA     |     A4
  *      XDA     |     -
  *      XCL     |     -
  *      AD0     |     GND
