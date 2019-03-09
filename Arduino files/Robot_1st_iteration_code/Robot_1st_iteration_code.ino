@@ -49,7 +49,7 @@
  *      IN1      |      D5            IN1 requires PWM
  *      IN2      |      D4
  *      IN3      |      D3            IN3 requires PWM
- *      IN4      |      D2   
+ *      IN4      |      D16   
  *     
  *     L298N  --->   Motors
  *  -----------------------------
@@ -158,7 +158,7 @@ const uint64_t pipes[2] = { 0xF0F0F0F0E1LL, 0xF0F0F0F0D2LL };
 int speed1     = 5; //Controls speed (PWM) for DC motor 1
 int direction1 = 4; //Controls direction for DC motor 1
 int speed2     = 3; //Controls speed (PWM) for DC motor 2
-int direction2 = 2; //Controls direction for DC motor 2
+int direction2 = 16; //Controls direction for DC motor 2
 
 bool direction = HIGH;  // Start the motor by moving it towards one direction. Whether it is
                         // clockwise or anticlockwise depends on how you have connected the 
