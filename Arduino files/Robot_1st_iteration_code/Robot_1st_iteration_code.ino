@@ -123,6 +123,18 @@
 
 #include <Pixy2.h>  //include the Pixy2 library
 
+//MPU6050 libraries
+#include "I2Cdev.h"
+#include "MPU6050.h"
+
+// Arduino Wire library is required if I2Cdev I2CDEV_ARDUINO_WIRE implementation
+// is used in I2Cdev.h
+#if I2CDEV_IMPLEMENTATION == I2CDEV_ARDUINO_WIRE
+    #include "Wire.h"
+#endif
+
+MPU6050 accelgyro;
+
 //nRF24 libraries
 #include <SPI.h>
 #include "RF24.h"
@@ -165,7 +177,11 @@ bool direction = HIGH;  // Start the motor by moving it towards one direction. W
                         // motor's coil. Setting it LOW will make it move in the other direction.
 
 
+//Variables to store values from mpu6050
+int16_t ax, ay, az;
+int16_t gx, gy, gz;
 
+#define OUTPUT_READABLE_ACCELGYRO
 
 void setup() { 
   //Servo Motor setup
@@ -198,6 +214,21 @@ void setup() {
   //Pixy setup (initializing the object
   pixy.init();
   pixy.changeProg("color_connected_components");
+
+  //MPU6050 setup
+  // join I2C bus (I2Cdev library doesn't do this automatically)
+  #if I2CDEV_IMPLEMENTATION == I2CDEV_ARDUINO_WIRE
+      Wire.begin();
+  #elif I2CDEV_IMPLEMENTATION == I2CDEV_BUILTIN_FASTWIRE
+      Fastwire::setup(400, true);
+  #endif
+  
+  Serial.println("Initializing I2C devices...");
+    accelgyro.initialize();
+
+    // verify connection
+    Serial.println("Testing device connections...");
+    Serial.println(accelgyro.testConnection() ? "MPU6050 connection successful" : "MPU6050 connection failed");
 } 
  
 void loop() { 
