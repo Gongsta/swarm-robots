@@ -10,7 +10,7 @@
  *  - 3 servo motors
  *  - Ultrasonic sensor
  *  - a L298N motor controller breakout
- *  - two small 5V DC motors
+ *  - two small 5V   DC motors
  *  - RGB light
  *  -
  *  
