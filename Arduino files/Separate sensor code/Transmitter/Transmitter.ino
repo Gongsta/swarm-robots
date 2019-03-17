@@ -2,7 +2,6 @@
  *   
  * This sketch shows how to create a simple transmitter using the nRF24 module.
  * 
- * This sketch was written by Peter Dalmaris for Arduino Step by Step 
  * 
  * Components
  * ----------

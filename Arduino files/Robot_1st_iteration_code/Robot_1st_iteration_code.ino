@@ -39,9 +39,9 @@
  *  Ultrasonic ---> Arduino Uno
  *  -----------------------------
  *      VCC      |      5V
- *      GND      |      GND
  *      Echo     |      D14
  *      Trig     |      D15
+ *      GND      |      GND
  *     
  *     L298N   ---> Arduino Uno
  *  -----------------------------
@@ -65,8 +65,8 @@
  *      
  * RGB Light   --> Arduino Uno
  *  -----------------------------
- *    GND        |      GND
  *   Red light   |      D1
+ *    GND        |      GND
  *  Green light  |      D7
  *  Blue light   |      D8
  *     

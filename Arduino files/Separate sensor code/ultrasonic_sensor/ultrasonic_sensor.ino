@@ -4,7 +4,6 @@
  * an object directly infront of it.
  * 
  * 
- * This sketch was written for Arduino Step by Step by Peter Dalmaris.
  * 
  * Components
  * ----------
@@ -31,6 +30,9 @@
  *  For information on ultrasounds: https://en.wikipedia.org/wiki/Ultrasound
  *  HC-SR04 datasheet: https://docs.google.com/document/d/1Y-yZnNhMYy7rwhAgyL_pfa39RsB-x2qR4vP8saG73rE
  *  Information about the pulseIn function: https://www.arduino.cc/en/Reference/PulseIn
+ *  
+ *  
+ *  
  *  
  * 
  */
