@@ -176,12 +176,14 @@ bool direction = HIGH;  // Start the motor by moving it towards one direction. W
                         // clockwise or anticlockwise depends on how you have connected the 
                         // motor's coil. Setting it LOW will make it move in the other direction.
 
-
+bool directi = LOW;
 //Variables to store values from mpu6050
 int16_t ax, ay, az;
 int16_t gx, gy, gz;
 
 #define OUTPUT_READABLE_ACCELGYRO
+
+
 
 void setup() { 
   //Servo Motor setup
@@ -229,10 +231,129 @@ void setup() {
     // verify connection
     Serial.println("Testing device connections...");
     Serial.println(accelgyro.testConnection() ? "MPU6050 connection successful" : "MPU6050 connection failed");
-} 
- 
-void loop() { 
+}
 
+
+void getRawData() {
+  // read raw accel/gyro measurements from device
+    accelgyro.getMotion6(&ax, &ay, &az, &gx, &gy, &gz);
+
+    // these methods (and a few others) are also available
+    //accelgyro.getAcceleration(&ax, &ay, &az);
+    //accelgyro.getRotation(&gx, &gy, &gz);
+
+    #ifdef OUTPUT_READABLE_ACCELGYRO
+        // display tab-separated accel/gyro x/y/z values
+        Serial.print("a/g:\t");
+        Serial.print(ax); Serial.print("\t");
+        Serial.print(ay); Serial.print("\t");
+        Serial.print(az); Serial.print("\t");
+        Serial.print(gx); Serial.print("\t");
+        Serial.print(gy); Serial.print("\t");
+        Serial.println(gz);
+    #endif
+
+    #ifdef OUTPUT_BINARY_ACCELGYRO
+        Serial.write((uint8_t)(ax >> 8)); Serial.write((uint8_t)(ax & 0xFF));
+        Serial.write((uint8_t)(ay >> 8)); Serial.write((uint8_t)(ay & 0xFF));
+        Serial.write((uint8_t)(az >> 8)); Serial.write((uint8_t)(az & 0xFF));
+        Serial.write((uint8_t)(gx >> 8)); Serial.write((uint8_t)(gx & 0xFF));
+        Serial.write((uint8_t)(gy >> 8)); Serial.write((uint8_t)(gy & 0xFF));
+        Serial.write((uint8_t)(gz >> 8)); Serial.write((uint8_t)(gz & 0xFF));
+    #endif
+
+}
+
+void getPosition() {
+  
+}
+
+void getUltrasonic() {
+  //Code that allows me to measure distance from ultrasonic sensor
+  long duration, distance;
+  digitalWrite(trigPin, LOW); 
+  delayMicroseconds(2); 
+  digitalWrite(trigPin, HIGH);
+  delayMicroseconds(10);
+  digitalWrite(trigPin, LOW);
+  duration = pulseIn(echoPin, HIGH);
+  distance = (duration/2) / 29.1;
+
+  if (distance >= 200 || distance <= 0){
+    Serial.println("Out of range");
+  }
+  else {
+    Serial.print(distance);
+    Serial.println(" cm"); //Prints the distance object is from robot
+  }
+}
+
+
+void setGreenLight() {
+    digitalWrite(GREEN_PIN, HIGH);   // turn the LED on (HIGH is the voltage level)
+    digitalWrite(BLUE_PIN, LOW);
+    digitalWrite(RED_PIN, LOW);   // turn the LED on (HIGH is the voltage level)
+
+}
+
+void setRedLight() {
+    digitalWrite(GREEN_PIN, LOW);   // turn the LED on (HIGH is the voltage level)
+    digitalWrite(BLUE_PIN, LOW);
+    digitalWrite(RED_PIN, HIGH);   // turn the LED on (HIGH is the voltage level)
+
+}
+
+void setBlueLight() {
+    digitalWrite(GREEN_PIN, LOW);   // turn the LED on (HIGH is the voltage level)
+    digitalWrite(BLUE_PIN, HIGH);
+    digitalWrite(RED_PIN, LOW);   // turn the LED on (HIGH is the voltage level)
+
+}
+
+//void centerObject() {
+//  
+//  static int i = 0;
+//  int j;
+//  char buf[64]; 
+//  int32_t panOffset, tiltOffset;
+//  
+//  // get active blocks from Pixy
+//  pixy.ccc.getBlocks();
+//  
+//  if (pixy.ccc.numBlocks)
+//  {        
+//    i++;
+//    
+//    if (i%60==0)
+//      Serial.println(i);   
+//    
+//    // calculate pan and tilt "errors" with respect to first object (blocks[0]), 
+//    // which is the biggest object (they are sorted by size).  
+//    panOffset = (int32_t)pixy.frameWidth/2 - (int32_t)pixy.ccc.blocks[0].m_x;
+//    tiltOffset = (int32_t)pixy.ccc.blocks[0].m_y - (int32_t)pixy.frameHeight/2;  
+//  
+//    // update loops
+//    panLoop.update(panOffset);
+//    tiltLoop.update(tiltOffset);
+//  
+//    // set pan and tilt servos  
+//    pixy.setServos(panLoop.m_command, tiltLoop.m_command);
+//   
+//#if 0 // for debugging
+//    sprintf(buf, "%ld %ld %ld %ld", rotateLoop.m_command, translateLoop.m_command, left, right);
+//    Serial.println(buf);   
+//#endif
+//
+//  }  
+//  else // no object detected, go into reset state
+//  {
+//    panLoop.reset();
+//    tiltLoop.reset();
+//    pixy.setServos(panLoop.m_command, tiltLoop.m_command);
+//  }
+//}
+
+void detectObjectPosition() {
   //Code that displays in the serial monitor the objects that the Pixy2  
   //has detected and prints out a variety of information
   int i; 
@@ -251,61 +372,20 @@ void loop() {
       pixy.ccc.blocks[i].print();
     }
   }
+}
 
- 
-
-
-
-  
-  //Code that lets me test that the motors are functioning 
-  
-   for (pos_index = 0; pos_index <= total_positions; pos_index += 1) { 
-    // in steps of 1 degree
-    myservo1.write(servo_positions[pos_index]);    // tell servo 1 to go to new position
-    
-    pixy.setServos(servo_positions[pos_index], servo_positions[pos_index]);
-    delay(100);                                    // Insert small delay to give servo 1 a head start
-//    myservo2.write(servo_positions[pos_index]);    // tell servo 2 to go to new position
-//    delay(400);                                    // wait for servo 2 to reach the position
-  }
+void loop() { 
 
 
   digitalWrite(direction1,direction);   // Direction control motor 1
-  digitalWrite(direction2,direction);   // Direction control motor 2
+  digitalWrite(direction2,directi);   // Direction control motor 2
   analogWrite(speed1, 150);             // PWM Speed Control motor 1
   analogWrite(speed2, 150);             // PWM Speed Control motor 2
 
 
   
-  //Code that tests the RGB light
-  digitalWrite(BLUE_PIN, LOW);
-  digitalWrite(GREEN_PIN, HIGH);   // turn the LED on (HIGH is the voltage level)
-  delay(1000);                       // wait for a second
-  digitalWrite(GREEN_PIN, LOW);
-  digitalWrite(RED_PIN, HIGH);    // turn the LED off by making the voltage LOW
-  delay(1000);                       // wait for a second
-  digitalWrite(RED_PIN, LOW);   // turn the LED on (HIGH is the voltage level)
-  digitalWrite(BLUE_PIN, HIGH);
-  delay(1000);                       // wait for a second
 
   
-  //Code that allows me to measure distance from ultrasonic sensor
-  long duration, distance;
-  digitalWrite(trigPin, LOW); 
-  delayMicroseconds(2); 
-  digitalWrite(trigPin, HIGH);
-  delayMicroseconds(10);
-  digitalWrite(trigPin, LOW);
-  duration = pulseIn(echoPin, HIGH);
-  distance = (duration/2) / 29.1;
-
-  if (distance >= 200 || distance <= 0){
-    Serial.println("Out of range");
-  }
-  else {
-    Serial.print(distance);
-    Serial.println(" cm"); //Prints the distance object is from robot
-  }
   delay(250);
 
 } 

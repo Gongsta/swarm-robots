@@ -42,7 +42,7 @@
 int speed1     = 5; //Controls speed (PWM) for motor 1
 int direction1 = 4; //Controls direction for motor 1
 int speed2     = 3; //Controls speed (PWM) for motor 2
-int direction2 = 2; //Controls direction for motor 2
+int direction2 = 16.; //Controls direction for motor 2
    
 bool direction = HIGH;  // Start the motor by moving it towards one direction. Whether it is
                         // clockwise or anticlockwise depends on how you have connected the 
